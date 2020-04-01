@@ -48,9 +48,11 @@ def parse_xml_to_dict(xml_path):
 
 
 
-def get_files(dir):
-    return [f for f in listdir(dir) if isfile(join(dir, f))]
-
+def get_files(dir, sort = False):
+    files = [f for f in listdir(dir) if isfile(join(dir, f))]
+    if sort:
+        return sorted(files)
+    return files
 
 def check_rotation(path_video_file):
     import cv2

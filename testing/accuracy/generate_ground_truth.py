@@ -8,12 +8,31 @@ from os import listdir
 from os.path import isfile, join
 from PIL import Image
 from PIL import ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 import argparse
 import os
 import cv2
 import sys
 sys.path.insert(0, os.environ['PROJECT_ROOT'])
 from python_tools.common import mkdir, All_Day_Night, get_files, parse_xml_to_dict
+
+
+
+
+
+def generate_drawings(images_folder, annotations_folder, output_folder):
+    mkdir(output_folder)
+    for image_name, annotation_name in zip(get_files(images_folder, sort=True), get_files(annotations_folder, sort=True)):
+        img = Image.open(os.path.join(images_folder, image_name))
+        im = img.copy()
+        draw = ImageDraw.Draw(im)
+        annotations = open(os.path.join(annotations_folder, annotation_name), "r")
+        for line in annotations.readlines():
+            l = line.split()
+            draw.rectangle([float(l[1]), float(l[2]), float(l[3]), float(l[4])], outline="red")
+            im.save(os.path.join(output_folder, image_name), "JPEG")
+
+
 
 
 def resize_and_copy_images(src_folder, dst_folder, width, height):
@@ -30,9 +49,6 @@ def resize_and_copy_images(src_folder, dst_folder, width, height):
         img = cv2.resize(img, (width, height))
         cv2.imwrite(os.path.join(dst_folder, image_name), img)
 
-        # im = Image.open(image_path)
-        # im.thumbnail((width, height), Image.ANTIALIAS)
-        # im.save(os.path.join(dst_folder, image_name), "JPEG")
 
 
 def generate_txts(src_folder, dst_folder, width, height):
@@ -96,6 +112,10 @@ if __name__ == "__main__":
     if args.type is All_Day_Night.all_ or args.type is All_Day_Night.night:
         resize_and_copy_images(os.path.join(src_data_folder, 'night', 'images'), dst_images_folder, args.width, args.height)
         generate_txts(os.path.join(src_data_folder, 'night', 'xmls'), dst_txts_folder, args.width, args.height)
+
+
+    
+    generate_drawings(dst_images_folder, dst_txts_folder, os.path.join(testing_folder, 'draw'))
 
 
 
