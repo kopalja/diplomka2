@@ -1,4 +1,3 @@
 0 car
-1 bicycle
+1 truck
 2 motorbike
-3 truck

@@ -154,11 +154,33 @@ if [ "${number_to_process}" != '0' ]; then
         echo "---Additional informations---" >> "${MODEL_DIR}/output_tflite_graph_edgetpu.log"
         echo "width: ${WIDTH}" >> "${MODEL_DIR}/output_tflite_graph_edgetpu.log"
         echo "height: ${HEIGHT}" >> "${MODEL_DIR}/output_tflite_graph_edgetpu.log"
-
+        
+        cp -r "${OUTPUT_I}" "${LOCAL_GIT}/tensorboard/${CKPT_NAME}"
+        rm -r "${OUTPUT_I}/train"
+    
     done
 fi
 
+cd "${PROJECT_ROOT}/"
+git add -A
+git commit -m 'pc finished training'
+git push
+
 
 shutdown now
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

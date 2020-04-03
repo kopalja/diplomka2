@@ -1,4 +1,4 @@
-Edge TPU Compiler version 2.0.267685300
+Edge TPU Compiler version 2.0.291256449
 Input: /home/kopi/diplomka/training/output/mobilenet_v2_whole/model/output_tflite_graph.tflite
 Output: /home/kopi/diplomka/training/output/mobilenet_v2_whole/model/output_tflite_graph_edgetpu.tflite
 
@@ -12,5 +12,5 @@ DEPTHWISE_CONV_2D              17         Mapped to Edge TPU
 RESHAPE                        13         Mapped to Edge TPU
 LOGISTIC                       1          Mapped to Edge TPU
 ---Additional informations---
-width:          480
-height:          270
+width:          300
+height:          300
