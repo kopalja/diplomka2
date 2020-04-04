@@ -27,7 +27,7 @@ while [ "$1" != "" ]; do
         # test type
         -t | --type ) 
             shift 
-            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ]; then
+            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ] && [ "$1" != "detrac" ]; then
                 usage
             fi  
             TYPE=$1
@@ -48,6 +48,9 @@ ORIGIN=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "origin:" | s
 
 if [ "${TYPE}" == "voc" ]; then
     TESTING_DIR="${LOCAL_GIT}/testing/exported/pascal"
+
+elif [ "${TYPE}" == "detrac" ]; then
+    TESTING_DIR="${LOCAL_GIT}/testing/exported/detrac"
 else
     HEIGHT=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "height:" | sed "s/[a-z]*://g")
     WIDTH=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "width:" | sed "s/[a-z]*://g")
