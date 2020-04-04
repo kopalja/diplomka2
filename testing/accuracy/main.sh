@@ -81,7 +81,7 @@ python evaluate_results.py \
     --ground_truth="${TESTING_DIR}"
 
 
-#rm -rf "${PROJECT_ROOT}/testing/accuracy/model_detection_txts"
+rm -rf "${PROJECT_ROOT}/testing/accuracy/model_detection_txts"
 
 rm -rf ".temp_files"
 rm -rf "output"
