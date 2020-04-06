@@ -122,13 +122,15 @@ def parse_frame(node, frame, width, height):
         name = atr["vehicle_type"]
         if name == "van":
             name = "car"
+        elif name == "bus":
+            name = "truck"
 
         x_min = int(max(0, float(box["left"]) - frame.x_min))
         x_max = int(min(width, float(box["left"]) + float(box["width"]) - frame.x_min))
         y_min = int(max(0, float(box["top"]) - frame.y_min))
         y_max = int(min(height, float(box["top"]) + float(box["height"]) - frame.y_min))
 
-        if len(target) != 2 or (name != "car" and name != "bus") or x_max < 10 or y_max < 10 or x_min >= width - 10 or y_min >= height - 10:
+        if len(target) != 2 or (name != "car" and name != "truck") or x_max < 10 or y_max < 10 or x_min >= width - 10 or y_min >= height - 10:
             continue
         records.append([name, x_min, y_min, x_max, y_max])
 

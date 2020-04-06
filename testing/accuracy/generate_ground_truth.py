@@ -67,7 +67,7 @@ def generate_txts(src_folder, dst_folder, width, height):
             xmin = int(obj['bndbox']['xmin']) - start_x
             xmax = int(obj['bndbox']['xmax']) - start_x
 
-            if xmin >= or_height - min_size or xmax <= 0 + min_size:
+            if obj['name'] == 'bicycle' or xmin >= or_height - min_size or xmax <= 0 + min_size:
                 continue 
             xmin = max(0, xmin)
             xmax = min(or_height - 1, xmax)

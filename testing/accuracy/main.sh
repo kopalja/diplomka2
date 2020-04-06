@@ -44,16 +44,30 @@ done
 
 # 1. set variables
 ORIGIN=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "origin:" | sed "s/[a-z]*://g" | sed 's/ //g')
+HEIGHT=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "height:" | sed "s/[a-z]*://g")
+WIDTH=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "width:" | sed "s/[a-z]*://g")
 
 
 if [ "${TYPE}" == "voc" ]; then
-    TESTING_DIR="${LOCAL_GIT}/testing/exported/pascal"
-
+    TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/voc_${WIDTH}x${HEIGHT}" | sed 's/ //g')
+    # 2. generate groung truth
+    if [ -d "${TESTING_DIR}" ]; then 
+        echo 'Ground truth already exist'
+    else
+        echo 'Generating new ground truth testing set'
+        python generate_voc_ground_truth.py --width ${WIDTH} --height ${HEIGHT}
+    fi
 elif [ "${TYPE}" == "detrac" ]; then
-    TESTING_DIR="${LOCAL_GIT}/testing/exported/detrac"
+
+    TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/detrac_${WIDTH}x${HEIGHT}" | sed 's/ //g')
+    # 2. generate groung truth
+    if [ -d "${TESTING_DIR}" ]; then 
+        echo 'Ground truth already exist'
+    else
+        echo 'Generating new ground truth testing set'
+        python generate_dectrac_ground_truth.py --width ${WIDTH} --height ${HEIGHT}
+    fi
 else
-    HEIGHT=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "height:" | sed "s/[a-z]*://g")
-    WIDTH=$(cat "${MODEL_DIR}/output_tflite_graph_edgetpu.log" | grep "width:" | sed "s/[a-z]*://g")
     TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/${TYPE}_${WIDTH}x${HEIGHT}" | sed 's/ //g')
     # 2. generate groung truth
     if [ -d "${TESTING_DIR}" ]; then 
