@@ -28,7 +28,7 @@ delete_model_files(){
 }
 
 copy_model_into_obj_api(){
-    TYPE=$(cat "$1/pipeline.config" | grep "type:" | sed 's/[a-z]*: \"//g' | sed 's/\"//g' | sed 's/\s//g')
+    TYPE=$(cat "$1/pipeline.config" | grep '\stype:' | sed 's/[a-z]*: \"//g' | sed 's/\"//g' | sed 's/\s//g')
     ARCHITECTURE_DIR="$2/${TYPE}"
     #copy model to obj API
     cp "${ARCHITECTURE_DIR}/model.ckpt.data-00000-of-00001" "model.ckpt.data-00000-of-00001"
@@ -100,7 +100,6 @@ if [ "${number_to_process}" != '0' ]; then
         OUTPUT_I="${PROJECT_ROOT}/training/output/${CKPT_NAME}"
         if [ -d "${OUTPUT_I}" ]; then rm -Rf ${OUTPUT_I}; fi
         mkdir "${OUTPUT_I}"
-
 
 
         copy_model_into_obj_api "${CKPT_DIR}" "${HOME}/local_git/architectures"
