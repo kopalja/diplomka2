@@ -14,7 +14,7 @@ MINOVERLAP = 0.5 # default value (defined in the PASCAL VOC2012 challenge)
 parser = argparse.ArgumentParser()
 parser.add_argument('--ground_truth', type = str)
 parser.add_argument('-na', '--no-animation', help="no animation is shown.", action="store_true")
-parser.add_argument('-np', '--no-plot', help="no plot is shown.", action="store_true")
+parser.add_argument('-np', '--no-plot', help="no plot is shown.", action="store_true", default = True)
 parser.add_argument('-q', '--quiet', help="minimalistic console output.", action="store_true")
 # argparse receiving list of classes to be ignored
 parser.add_argument('-i', '--ignore', nargs='+', type=str, help="ignore a list of classes.")
