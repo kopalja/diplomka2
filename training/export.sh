@@ -7,7 +7,7 @@ INPUT_TENSORS='normalized_input_image_tensor'
 OUTPUT_TENSORS='TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3'
 
 
-CKPT_DIR="${PROJECT_ROOT}/training/configs/configs_to_process/ssd"
+CKPT_DIR="${PROJECT_ROOT}/training/configs/configs_to_process/inception"
 
 
 CKPT_NAME="$(basename $CKPT_DIR)"
@@ -15,7 +15,7 @@ OUTPUT_I="${PROJECT_ROOT}/training/output/${CKPT_NAME}"
 
 MODEL_DIR="${OUTPUT_I}/model"
 TRAIN_DIR="${OUTPUT_I}/train"
-ckpt_number=0
+ckpt_number=55000
 echo "EXPORTING frozen graph from checkpoint..."
 python export_tflite_ssd_graph.py \
             --pipeline_config_path="${CKPT_DIR}/pipeline.config" \
@@ -29,7 +29,6 @@ HEIGHT=$(cat "${CKPT_DIR}/pipeline.config" | grep "height:" | sed "s/[a-z]*://g"
 WIDTH=$(cat "${CKPT_DIR}/pipeline.config" | grep "width:" | sed "s/[a-z]*://g")
 
 
-exit
 echo "CONVERTING frozen graph to TF Lite file..."
 tflite_convert \
             --output_file="${MODEL_DIR}/output_tflite_graph.tflite" \

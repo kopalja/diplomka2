@@ -110,8 +110,8 @@ if [ "${number_to_process}" != '0' ]; then
         python model_main.py \
             --pipeline_config_path="${CKPT_DIR}/pipeline.config" \
             --model_dir="${TRAIN_DIR}" \
-            --num_train_steps="${num_training_steps}"
-            #--num_eval_steps="1000"
+            --num_train_steps="${num_training_steps}" \
+            --num_eval_steps="500"
 
 
 
