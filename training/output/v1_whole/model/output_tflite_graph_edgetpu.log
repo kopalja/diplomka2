@@ -1,0 +1,15 @@
+Edge TPU Compiler version 2.0.291256449
+Input: /home/kopi/diplomka/training/output/v1_whole/model/output_tflite_graph.tflite
+Output: /home/kopi/diplomka/training/output/v1_whole/model/output_tflite_graph_edgetpu.tflite
+
+Operator                       Count      Status
+
+DEPTHWISE_CONV_2D              13         Mapped to Edge TPU
+RESHAPE                        13         Mapped to Edge TPU
+LOGISTIC                       1          Mapped to Edge TPU
+CUSTOM                         1          Operation is working on an unsupported data type
+CONCATENATION                  2          Mapped to Edge TPU
+CONV_2D                        34         Mapped to Edge TPU
+---Additional informations---
+width:          300
+height:          300

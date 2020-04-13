@@ -146,9 +146,7 @@ if [ "${number_to_process}" != '0' ]; then
         # Compile model for edge tpu
         edgetpu_compiler "${MODEL_DIR}/output_tflite_graph.tflite" -o "${MODEL_DIR}"
 
-        # Delete all unnessesary model files
-        # delete_train_files "${TRAIN_DIR}"
-        # delete_model_files "${MODEL_DIR}"
+
 
         echo "---Additional informations---" >> "${MODEL_DIR}/output_tflite_graph_edgetpu.log"
         echo "width: ${WIDTH}" >> "${MODEL_DIR}/output_tflite_graph_edgetpu.log"
@@ -156,17 +154,21 @@ if [ "${number_to_process}" != '0' ]; then
         
         cp -r "${OUTPUT_I}" "${LOCAL_GIT}/tensorboard/${CKPT_NAME}"
         rm -r "${OUTPUT_I}/train"
+
+        # Delete all unnessesary model files
+        #delete_train_files "${TRAIN_DIR}"
+        delete_model_files "${MODEL_DIR}"
     
     done
 fi
 
-# cd "${PROJECT_ROOT}/"
-# git add -A
-# git commit -m 'pc finished training'
-# git push
+cd "${PROJECT_ROOT}/"
+git add -A
+git commit -m 'pc finished training'
+git push
 
 
-# shutdown now
+shutdown now
 
 
 
