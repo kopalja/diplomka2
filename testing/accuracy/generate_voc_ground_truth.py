@@ -110,6 +110,10 @@ def generate_txt(src_xml, dst, coordinates, searching_objects):
         xmax = int(obj['bndbox']['xmax']) - coordinates[0]
         ymin = int(obj['bndbox']['ymin']) - coordinates[1]
         ymax = int(obj['bndbox']['ymax']) - coordinates[1]
+        #tmp
+        if name == 'truck':
+            name = 'car'
+        #tmp-end
         detections_file.write("{0} {1} {2} {3} {4} \n".format(name, xmin, ymin, xmax, ymax))
     detections_file.close()
         

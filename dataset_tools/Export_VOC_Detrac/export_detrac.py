@@ -159,7 +159,7 @@ def process_detrac_xml(xml_path, width, height, folders, name_index):
                 frame.y_max = frame.y_min + height 
         elif node.tag == "frame":
             image_index += 1
-            if image_index % 100 == 5:
+            if image_index % 30 == 5:
                 records = parse_frame(node, frame, width, height)
                 if len(records) > 0:
                     create_testing_sample(frame, records, width, height, folders, image_index, name_index)

@@ -111,6 +111,8 @@ def compute_frame_window(node):
 
 
 def parse_frame(node, frame, width, height):
+    def rescale(pos, or_size, new_size):
+        return int((int(pos) / or_size) * new_size)
     records = []
     for target in node[0]: 
         box = target[0].attrib
@@ -125,13 +127,29 @@ def parse_frame(node, frame, width, height):
         elif name == "bus":
             name = "truck"
 
-        x_min = int(max(0, float(box["left"]) - frame.x_min))
-        x_max = int(min(width, float(box["left"]) + float(box["width"]) - frame.x_min))
-        y_min = int(max(0, float(box["top"]) - frame.y_min))
-        y_max = int(min(height, float(box["top"]) + float(box["height"]) - frame.y_min))
 
-        if len(target) != 2 or (name != "car" and name != "truck") or x_max < 10 or y_max < 10 or x_min >= width - 10 or y_min >= height - 10:
+        frame_width = frame.x_max - frame.x_min
+        frame_height = frame.y_max - frame.y_min
+
+        x_min = int(max(0, float(box["left"]) - frame.x_min))
+        x_max = int(min(frame_width, float(box["left"]) + float(box["width"]) - frame.x_min))
+        y_min = int(max(0, float(box["top"]) - frame.y_min))
+        y_max = int(min(frame_height, float(box["top"]) + float(box["height"]) - frame.y_min))
+
+
+        if len(target) != 2 or (name != "car" and name != "truck") or x_max < 10 or y_max < 10 or x_min >= frame_width - 10 or y_min >= frame_height - 10:
             continue
+
+        x_min = rescale(x_min, frame_width, width)
+        x_max = rescale(x_max, frame_width, width)
+
+        y_min = rescale(y_min, frame_height, height)
+        y_max = rescale(y_max, frame_height, height)
+
+        #tmp
+        if name == 'truck':
+            name = 'car'
+        #tmp-end
         records.append([name, x_min, y_min, x_max, y_max])
 
     return records
@@ -141,7 +159,7 @@ def parse_frame(node, frame, width, height):
 
 
 
-def process_detrac_xml(xml_path, width, height, folders, name_index):
+def process_detrac_xml(xml_path, new_width, new_height, folders, name_index):
     root = load_xml(xml_path)
     image_index = 0
     frame = None
@@ -149,20 +167,21 @@ def process_detrac_xml(xml_path, width, height, folders, name_index):
         if node.tag == "ignored_region":
             frame = compute_frame_window(node)
             # frame is too small
-            if frame.x_max - frame.x_min < width or frame.y_max - frame.y_min < height:
+            if frame.x_max - frame.x_min < new_width or frame.y_max - frame.y_min < new_height:
                 break
-            else:
-                # recompute frame possition
-                frame.x_min = frame.x_center - (width // 2)
-                frame.x_max = frame.x_min + width
-                frame.y_min = frame.y_center - (height // 2)
-                frame.y_max = frame.y_min + height 
+            # else:
+            #     # recompute frame possition
+            #     frame.x_min = frame.x_center - (width // 2)
+            #     frame.x_max = frame.x_min + width
+            #     frame.y_min = frame.y_center - (height // 2)
+            #     frame.y_max = frame.y_min + height 
         elif node.tag == "frame":
             image_index += 1
-            if image_index % 100 == 5:
-                records = parse_frame(node, frame, width, height)
+            image_index = int(node.attrib["num"])
+            if image_index % 30 == 5:
+                records = parse_frame(node, frame, new_width, new_height)
                 if len(records) > 0:
-                    create_testing_sample(frame, records, width, height, folders, image_index, name_index)
+                    create_testing_sample(frame, records, new_width, new_height, folders, image_index, name_index)
                     name_index += 1
 
     return name_index
@@ -174,7 +193,10 @@ def create_testing_sample(frame, records, width, height, folders, image_index, n
     #print(os.path.join(folders[0], img_name))
     img = cv2.imread(os.path.join(folders[0], img_name))
     img = img[frame.y_min : frame.y_max, frame.x_min : frame.x_max]
+    img = cv2.resize(img, (height, width))
     cv2.imwrite(os.path.join(folders[2], str(name_index).zfill(8) + '.jpg'), img)
+
+
 
     #create txt
     detections_file = open(os.path.join(folders[3], str(name_index).zfill(8) + '.txt'), 'w+')

@@ -76,7 +76,13 @@ def generate_txts(src_folder, dst_folder, width, height):
             ymin = rescale(obj['bndbox']['ymin'], or_height, height)
             xmax = rescale(xmax, or_height, width)
             ymax = rescale(obj['bndbox']['ymax'], or_height, height)
-            detections_file.write("{0} {1} {2} {3} {4} \n".format(obj['name'], xmin, ymin, xmax, ymax))
+
+            #tmp
+            name = obj['name']
+            if name == 'truck':
+                name = 'car'
+            #tmp-end
+            detections_file.write("{0} {1} {2} {3} {4} \n".format(name, xmin, ymin, xmax, ymax))
         detections_file.close()
             
 

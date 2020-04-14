@@ -60,7 +60,7 @@ if [ "${TYPE}" == "voc" ]; then
 elif [ "${TYPE}" == "detrac" ]; then
 
     TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/detrac_${WIDTH}x${HEIGHT}" | sed 's/ //g')
-    # 2. generate groung truth
+    #2. generate groung truth
     if [ -d "${TESTING_DIR}" ]; then 
         echo 'Ground truth already exist'
     else
@@ -80,6 +80,7 @@ fi
 
 
 
+echo "${ORIGIN}"
 # 3. generate model results
 echo "Generating model results..."
 python generate_model_results.py \
@@ -89,6 +90,7 @@ python generate_model_results.py \
 
 
 echo "${TESTING_DIR}"
+#TESTING_DIR="/home/kopi/local_git/testing/exported/day_540x540"
 # 4. evaluate model results
 echo "Evaluating model results..."
 python evaluate_results.py \
