@@ -25,7 +25,7 @@ rects3 = ax.bar(full + width, dev, width, label='Testing custom')
 #ax.set_yscale('log')
 ax.set_ylabel('Car AP(0.5)')
 ax.set_xticks(full)
-ax.set_xticklabels(('Mobilenet V1', 'Retrained Mobilenet V1', 'Mobilenet V2', 'Retrained Mobilenet V2'))
+ax.set_xticklabels(('Mobilenet V1(300)', 'Retrained Mobilenet V1-6(300)', 'Mobilenet V2(300)', 'Retrained Mobilenet V2-6(300)'))
 ax.legend()
 
 

@@ -11,7 +11,7 @@ matplotlib.rc('font', **font)
 
 voc = (45.11, 45.15, 41.02, 42.51)
 detrac = (64.27, 66.76, 66.83, 68.43)
-dev = (78.52, 81.39, 79.42, 82.51)
+dev = (77.01, 81.41, 83.54, 84.72)
 
 full = np.arange(len(dev))  # the x locations for the groups
 width = 0.2  # the width of the bars
@@ -23,12 +23,12 @@ rects3 = ax.bar(full + width, dev, width, label='Testing custom')
 
 # Add some text for labels, title and custom x-axis tick labels, etc.
 #ax.set_yscale('log')
-ax.set_ylabel('Car + Truck AP(0.5)')
+ax.set_ylabel('Cars + Trucks + Motorbikes AP(0.5)')
 ax.set_xticks(full)
-ax.set_xticklabels(('Mobilenet V2-7(300)', 'Mobilenet V2-7(360)', 'Mobilenet V2-7(420)', 'Mobilenet V2-7(540)'))
+ax.set_xticklabels(('Mobilenet V1-9(300)', 'Mobilenet V1-6(300)', 'Mobilenet V1-3(300)', 'Mobilenet V1-0(300)'))
 
 locs = ["upper left", "lower left", "center right"]
-ax.legend(loc = locs[0], bbox_to_anchor=(0.184,1.1))
+ax.legend(loc = locs[0], bbox_to_anchor=(0.2,1))
 
 
 def autolabel(rects, xpos='center'):
