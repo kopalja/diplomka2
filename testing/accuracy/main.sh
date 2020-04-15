@@ -27,7 +27,7 @@ while [ "$1" != "" ]; do
         # test type
         -t | --type ) 
             shift 
-            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ] && [ "$1" != "detrac" ]; then
+            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ] && [ "$1" != "detrac" ] && [ "$1" != "train" ]; then
                 usage
             fi  
             TYPE=$1
@@ -58,7 +58,6 @@ if [ "${TYPE}" == "voc" ]; then
         python generate_voc_ground_truth.py --width ${WIDTH} --height ${HEIGHT}
     fi
 elif [ "${TYPE}" == "detrac" ]; then
-
     TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/detrac_${WIDTH}x${HEIGHT}" | sed 's/ //g')
     #2. generate groung truth
     if [ -d "${TESTING_DIR}" ]; then 
@@ -66,6 +65,15 @@ elif [ "${TYPE}" == "detrac" ]; then
     else
         echo 'Generating new ground truth testing set'
         python generate_dectrac_ground_truth.py --width ${WIDTH} --height ${HEIGHT}
+    fi
+elif [ "${TYPE}" == "train" ]; then
+    TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/train_${WIDTH}x${HEIGHT}" | sed 's/ //g')
+    #2. generate groung truth
+    if [ -d "${TESTING_DIR}" ]; then 
+        echo 'Ground truth already exist'
+    else
+        echo 'Generating new ground truth testing set'
+        python generate_ground_truth.py --type ${TYPE} --width ${WIDTH} --height ${HEIGHT}
     fi
 else
     TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/${TYPE}_${WIDTH}x${HEIGHT}" | sed 's/ //g')

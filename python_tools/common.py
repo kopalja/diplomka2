@@ -9,6 +9,7 @@ class All_Day_Night(Enum):
     all_ = 'all'
     day = 'day'
     night = 'night'
+    train = 'train'
 
 
 # Force delete folder if exist

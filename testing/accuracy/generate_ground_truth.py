@@ -119,6 +119,10 @@ if __name__ == "__main__":
         resize_and_copy_images(os.path.join(src_data_folder, 'night', 'images'), dst_images_folder, args.width, args.height)
         generate_txts(os.path.join(src_data_folder, 'night', 'xmls'), dst_txts_folder, args.width, args.height)
 
+    if args.type is All_Day_Night.train:
+        resize_and_copy_images(os.path.join(src_data_folder, 'train', 'images'), dst_images_folder, args.width, args.height)
+        generate_txts(os.path.join(src_data_folder, 'train', 'xmls'), dst_txts_folder, args.width, args.height)   
+
 
     
     generate_drawings(dst_images_folder, dst_txts_folder, os.path.join(testing_folder, 'draw'))
