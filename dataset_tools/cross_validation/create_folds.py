@@ -15,13 +15,18 @@ from python_tools.common import get_files, mkdir
 
 
 
-def create_fold_structure(path):
+def create_fold_structure(path, train):
     mkdir(path)
     mkdir(os.path.join(path, 'draw'))
     mkdir(os.path.join(path, 'images'))
-    mkdir(os.path.join(path, 'xmls'))
 
-
+    if train:
+        mkdir(os.path.join(path, 'annotations'))
+        mkdir(os.path.join(path, 'annotations', 'xmls'))
+        return open(os.path.join(path, 'annotations', 'trainval.txt'), 'w+')
+    else:
+        mkdir(os.path.join(path, 'xmls'))
+        return None
 
 
 
@@ -52,29 +57,37 @@ if __name__ == "__main__":
         test_path = os.path.join(fold_path, 'test')
 
         mkdir(fold_path)
-        create_fold_structure(train_path)
-        create_fold_structure(test_path)
+        trainval_file = create_fold_structure(train_path, train=True)
+        create_fold_structure(test_path, train=False)
         mkdir(os.path.join(fold_path, 'model'))
 
         i, train_index, test_index = 0, 0, 0
         for draw_name, image_name, xml_name in zip(draw_names, image_names, xml_names):
             dst_path = None
             name_index = None
+            annotation = None
             if i > fold_index * fold_size and i < (fold_index + 1) * fold_size:
                 dst_path = test_path
                 name_index = test_index
                 test_index += 1
+                annotation = False
             else:
                 dst_path = train_path
                 name_index = train_index
                 train_index += 1
+                annotation = True
 
             shutil.copy(os.path.join(src_draw, draw_name), os.path.join(dst_path, 'draw', "my_" + str(name_index).zfill(6) + ".jpg"))
             shutil.copy(os.path.join(src_images, image_name), os.path.join(dst_path, 'images', "my_" + str(name_index).zfill(6) + ".jpg"))
-            shutil.copy(os.path.join(src_xmls, xml_name), os.path.join(dst_path, 'xmls', "my_" + str(name_index).zfill(6) + ".xml"))
+
+            if annotation:
+                shutil.copy(os.path.join(src_xmls, xml_name), os.path.join(dst_path, 'annotations', 'xmls', "my_" + str(name_index).zfill(6) + ".xml"))
+                trainval_file.write("my_" + str(name_index).zfill(6) + ".xml\n")
+            else:
+                shutil.copy(os.path.join(src_xmls, xml_name), os.path.join(dst_path, 'xmls', "my_" + str(name_index).zfill(6) + ".xml"))
+
             i += 1
-
-
+        trainval_file.close()
 
 
 

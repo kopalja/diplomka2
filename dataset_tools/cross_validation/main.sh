@@ -42,13 +42,13 @@ fi
 
 
 echo "Creating folds"
-python create_folds.py --src_dataset="${LOCAL_GIT}/dataset/exported/${SRC_DATATSET}" --number_of_folds="${FOLDS_NUM}" --dst_name="${SRC_DATATSET}"
+#python create_folds.py --src_dataset="${LOCAL_GIT}/dataset/exported/${SRC_DATATSET}" --number_of_folds="${FOLDS_NUM}" --dst_name="${SRC_DATATSET}"
 
 
 for ((i=0;i<"${FOLDS_NUM}";i++)); 
 do 
    # your-unix-command-here
-   ./train --d "folds/${SRC_DATATSET}/fold_${i}" -s "45000"
+   ./train.sh -d "folds/${SRC_DATATSET}/fold_${i}/train" -s "450" -i "$i"
 done
 
 

@@ -101,7 +101,15 @@ if [ "${number_to_process}" != '0' ]; then
         echo "tf records done"
 
         CKPT_NAME="$(basename $CKPT_DIR)"
-        OUTPUT_I="${PROJECT_ROOT}/training/output/folds/${CKPT_NAME}/model_${INDEX}"
+        BASE_FOLDER="${PROJECT_ROOT}/training/output/folds/${CKPT_NAME}"
+        if [ -d "${BASE_FOLDER}" ]; then 
+            echo "base exist"; 
+        else
+            mkdir "${BASE_FOLDER}";
+        fi
+
+
+        OUTPUT_I="${BASE_FOLDER}/model_${INDEX}"
         if [ -d "${OUTPUT_I}" ]; then rm -Rf ${OUTPUT_I}; fi
         mkdir "${OUTPUT_I}"
 
