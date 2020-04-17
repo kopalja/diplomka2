@@ -147,8 +147,8 @@ def parse_frame(node, frame, width, height):
         y_max = rescale(y_max, frame_height, height)
 
         #tmp
-        if name == 'truck':
-            name = 'car'
+        # if name == 'truck':
+        #     name = 'car'
         #tmp-end
         records.append([name, x_min, y_min, x_max, y_max])
 

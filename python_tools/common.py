@@ -10,6 +10,11 @@ class All_Day_Night(Enum):
     day = 'day'
     night = 'night'
     train = 'train'
+    fold_0 = 'fold_0'
+    fold_1 = 'fold_1'
+    fold_2 = 'fold_2'
+    fold_3 = 'fold_3'
+    fold_4 = 'fold_4'
 
 
 # Force delete folder if exist

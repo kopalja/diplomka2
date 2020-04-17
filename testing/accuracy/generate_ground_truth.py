@@ -79,8 +79,8 @@ def generate_txts(src_folder, dst_folder, width, height):
 
             #tmp
             name = obj['name']
-            if name == 'truck':
-                name = 'car'
+            # if name == 'truck':
+            #     name = 'car'
             #tmp-end
             detections_file.write("{0} {1} {2} {3} {4} \n".format(name, xmin, ymin, xmax, ymax))
         detections_file.close()
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     parser.add_argument('--type', type = All_Day_Night, choices=list(All_Day_Night))
     parser.add_argument('--width', type = int)
     parser.add_argument('--height', type = int)
+    parser.add_argument('--fold', type = str, default="")
     args = parser.parse_args()
 
     testing_name = args.type.value + '_' + str(args.width) + 'x' + str(args.height)
@@ -107,21 +108,30 @@ if __name__ == "__main__":
     mkdir(dst_images_folder)
     mkdir(dst_txts_folder)
 
+
+    print("aaaaaaaaaa")
+    print(args.fold)
     # copy images
-    src_data_folder = os.path.join(os.environ['LOCAL_GIT'], 'testing/data')
+    if args.fold == "":
+        src_data_folder = os.path.join(os.environ['LOCAL_GIT'], 'testing/data')
+        if args.type is All_Day_Night.all_ or args.type is All_Day_Night.day:
+            resize_and_copy_images(os.path.join(src_data_folder, 'day', 'images'), dst_images_folder, args.width, args.height)
+            generate_txts(os.path.join(src_data_folder, 'day', 'xmls'), dst_txts_folder, args.width, args.height)
 
-    if args.type is All_Day_Night.all_ or args.type is All_Day_Night.day:
-        resize_and_copy_images(os.path.join(src_data_folder, 'day', 'images'), dst_images_folder, args.width, args.height)
-        generate_txts(os.path.join(src_data_folder, 'day', 'xmls'), dst_txts_folder, args.width, args.height)
+
+        if args.type is All_Day_Night.all_ or args.type is All_Day_Night.night:
+            resize_and_copy_images(os.path.join(src_data_folder, 'night', 'images'), dst_images_folder, args.width, args.height)
+            generate_txts(os.path.join(src_data_folder, 'night', 'xmls'), dst_txts_folder, args.width, args.height)
+
+        if args.type is All_Day_Night.train:
+            resize_and_copy_images(os.path.join(src_data_folder, 'train', 'images'), dst_images_folder, args.width, args.height)
+            generate_txts(os.path.join(src_data_folder, 'train', 'xmls'), dst_txts_folder, args.width, args.height)   
+    else:
+        src_data_folder = os.path.join(os.environ['LOCAL_GIT'], 'dataset', 'exported', 'folds', 'batch_1_2_day_s', args.fold, 'test')
+        resize_and_copy_images(os.path.join(src_data_folder, 'images'), dst_images_folder, args.width, args.height)
+        generate_txts(os.path.join(src_data_folder, 'xmls'), dst_txts_folder, args.width, args.height)   
 
 
-    if args.type is All_Day_Night.all_ or args.type is All_Day_Night.night:
-        resize_and_copy_images(os.path.join(src_data_folder, 'night', 'images'), dst_images_folder, args.width, args.height)
-        generate_txts(os.path.join(src_data_folder, 'night', 'xmls'), dst_txts_folder, args.width, args.height)
-
-    if args.type is All_Day_Night.train:
-        resize_and_copy_images(os.path.join(src_data_folder, 'train', 'images'), dst_images_folder, args.width, args.height)
-        generate_txts(os.path.join(src_data_folder, 'train', 'xmls'), dst_txts_folder, args.width, args.height)   
 
 
     

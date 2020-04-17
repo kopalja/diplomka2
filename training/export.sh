@@ -7,15 +7,15 @@ INPUT_TENSORS='normalized_input_image_tensor'
 OUTPUT_TENSORS='TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3'
 
 
-CKPT_DIR="${PROJECT_ROOT}/training/configs/configs_to_process/inception"
+CKPT_DIR="${PROJECT_ROOT}/training/configs/configs_to_process/v2_300_6"
 
 
 CKPT_NAME="$(basename $CKPT_DIR)"
-OUTPUT_I="${PROJECT_ROOT}/training/output/${CKPT_NAME}"
+OUTPUT_I="${PROJECT_ROOT}/training/output/folds/${CKPT_NAME}/model_4"
 
 MODEL_DIR="${OUTPUT_I}/model"
 TRAIN_DIR="${OUTPUT_I}/train"
-ckpt_number=55000
+ckpt_number=41382
 echo "EXPORTING frozen graph from checkpoint..."
 python export_tflite_ssd_graph.py \
             --pipeline_config_path="${CKPT_DIR}/pipeline.config" \

@@ -4,7 +4,7 @@
 # 1. parse parameters
 # a) model name/path b) all/day/night "c") resolution (this is parsed from .log)
 usage(){
-    echo "Usage: sysinfo_page [[-n name of model ], [-t type of new dataset {all, day, night, voc}]]"
+    echo "Usage: sysinfo_page [[-n name of model ], [-t type of new dataset {all, day, night, voc, fold_<num>]]"
     exit
 }
 
@@ -27,7 +27,7 @@ while [ "$1" != "" ]; do
         # test type
         -t | --type ) 
             shift 
-            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ] && [ "$1" != "detrac" ] && [ "$1" != "train" ]; then
+            if [ "$1" != "all" ] && [ "$1" != "day" ] && [ "$1" != "night" ] && [ "$1" != "voc" ] && [ "$1" != "detrac" ] && [ "$1" != "train" ] && [[ $1 != fold_* ]]; then
                 usage
             fi  
             TYPE=$1
@@ -74,6 +74,15 @@ elif [ "${TYPE}" == "train" ]; then
     else
         echo 'Generating new ground truth testing set'
         python generate_ground_truth.py --type ${TYPE} --width ${WIDTH} --height ${HEIGHT}
+    fi
+elif [[ ${TYPE} == fold_* ]]; then
+    TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/${TYPE}_${WIDTH}x${HEIGHT}" | sed 's/ //g')
+    #2. generate groung truth
+    if [ -d "${TESTING_DIR}" ]; then 
+        echo 'Ground truth already exist'
+    else
+        echo 'Generating new ground truth testing set'
+        python generate_ground_truth.py --type ${TYPE} --width ${WIDTH} --height ${HEIGHT} --fold ${TYPE}
     fi
 else
     TESTING_DIR=$(echo "${LOCAL_GIT}/testing/exported/${TYPE}_${WIDTH}x${HEIGHT}" | sed 's/ //g')

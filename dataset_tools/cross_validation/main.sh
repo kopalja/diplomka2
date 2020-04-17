@@ -48,7 +48,7 @@ echo "Creating folds"
 for ((i=0;i<"${FOLDS_NUM}";i++)); 
 do 
    # your-unix-command-here
-   ./train.sh -d "folds/${SRC_DATATSET}/fold_${i}/train" -s "450" -i "$i"
+   ./train.sh -d "folds/${SRC_DATATSET}/fold_${i}/train" -s "45000" -i "$i"
 done
 
 

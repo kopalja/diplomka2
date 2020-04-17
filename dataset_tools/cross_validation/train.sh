@@ -174,13 +174,13 @@ if [ "${number_to_process}" != '0' ]; then
     done
 fi
 
-cd "${PROJECT_ROOT}/"
-git add -A
-git commit -m 'pc finished training'
-git push
+# cd "${PROJECT_ROOT}/"
+# git add -A
+# git commit -m 'pc finished training'
+# git push
 
 
-shutdown now
+# shutdown now
 
 
 

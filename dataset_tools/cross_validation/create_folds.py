@@ -43,9 +43,9 @@ if __name__ == "__main__":
     dst_dataset = os.path.join(os.environ['LOCAL_GIT'], 'dataset', 'exported', 'folds', args.dst_name) 
     mkdir(dst_dataset)
 
-    draw_names = get_files(src_draw, sort = True)
-    image_names = get_files(src_images, sort = True)
-    xml_names = get_files(src_xmls, sort = True)
+    draw_names = get_files(src_draw, sort = False)
+    image_names = get_files(src_images, sort = False)
+    xml_names = get_files(src_xmls, sort = False)
     fold_size = len(xml_names) // int(args.number_of_folds)
 
     if len(xml_names) != len(image_names) or len(draw_names) != len(image_names):
@@ -63,6 +63,8 @@ if __name__ == "__main__":
 
         i, train_index, test_index = 0, 0, 0
         for draw_name, image_name, xml_name in zip(draw_names, image_names, xml_names):
+            image_name = draw_name
+            xml_name = draw_name[:-4] + '.xml'
             dst_path = None
             name_index = None
             annotation = None
