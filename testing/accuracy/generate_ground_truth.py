@@ -30,13 +30,15 @@ def generate_drawings(images_folder, annotations_folder, output_folder):
         for line in annotations.readlines():
             l = line.split()
             draw.rectangle([float(l[1]), float(l[2]), float(l[3]), float(l[4])], outline="red")
-            im.save(os.path.join(output_folder, image_name), "JPEG")
+        im.save(os.path.join(output_folder, image_name), "JPEG")
 
 
 
 
 def resize_and_copy_images(src_folder, dst_folder, width, height):
-    for image_name in get_files(src_folder):
+    name_index = len(get_files(dst_folder))
+    print('name index {0}'.format(name_index))
+    for i, image_name in enumerate(get_files(src_folder, sort=True)):
         image_path = os.path.join(src_folder, image_name)
         img = cv2.imread(image_path)
         img_height, img_width, _ = img.shape
@@ -47,7 +49,7 @@ def resize_and_copy_images(src_folder, dst_folder, width, height):
         img = img[0 : img_height, border : border + img_height]
         #downscale resolution
         img = cv2.resize(img, (width, height))
-        cv2.imwrite(os.path.join(dst_folder, image_name), img)
+        cv2.imwrite(os.path.join(dst_folder, "my_" + str(name_index + i).zfill(6) + ".jpg"), img)
 
 
 
@@ -56,8 +58,9 @@ def generate_txts(src_folder, dst_folder, width, height):
     def rescale(pos, or_size, new_size):
         return int((int(pos) / or_size) * new_size)
 
-    for xml_name in get_files(src_folder):
-        detections_file = open(os.path.join(dst_folder, xml_name[:-4]  + '.txt'), 'w+')
+    name_index = len(get_files(dst_folder))
+    for i, xml_name in enumerate(get_files(src_folder, sort=True)):
+        detections_file = open(os.path.join(dst_folder, "my_" + str(name_index + i).zfill(6) + ".txt"), 'w+')
         data = parse_xml_to_dict(os.path.join(src_folder, xml_name))
 
         or_width, or_height = int(data['size']['width']), int(data['size']['height'])
