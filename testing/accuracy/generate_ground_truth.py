@@ -79,8 +79,8 @@ def generate_txts(src_folder, dst_folder, width, height):
 
             #tmp
             name = obj['name']
-            # if name == 'truck':
-            #     name = 'car'
+            if name == 'truck':
+                name = 'car'
             #tmp-end
             detections_file.write("{0} {1} {2} {3} {4} \n".format(name, xmin, ymin, xmax, ymax))
         detections_file.close()

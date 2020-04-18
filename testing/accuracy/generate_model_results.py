@@ -49,8 +49,8 @@ if __name__ == "__main__":
                         name = "truck"
 
                     #tmp
-                    # if name == 'truck':
-                    #     name = 'car'
+                    if name == 'truck':
+                        name = 'car'
                     #tmp-end
                     box = obj.bounding_box.flatten().tolist()
                     detections_file.write("{0} {1} {2} {3} {4} {5} \n".format(name, obj.score, round(box[0]), round(box[1]), round(box[2]), round(box[3])))
