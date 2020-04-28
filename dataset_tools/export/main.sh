@@ -13,7 +13,6 @@ usage()
     echo "Usage: sysinfo_page [[-n name of new dataset ], [-t type of new dataset {all, day, night}], [-b list of included batches]]"
     exit
 }
-cd "${PROJECT_ROOT}/training/dataset_tools/export"
 
 
 # parse arguments
@@ -38,7 +37,6 @@ while [ "$1" != "" ]; do
             for batch in $1
             do
                 BATCH[$i]=${batch}
-                #echo "${BATCH[$i]}"  
                 ((i++))
             done
             ;;
@@ -51,34 +49,34 @@ while [ "$1" != "" ]; do
     shift
 done
 
-
 PROCESSED_DIR="${LOCAL_GIT}/dataset/processed"
-EXPORTED_DIR="${LOCAL_GIT}/dataset/exported"
-
+EXPORTED_DIR="${LOCAL_GIT}/dataset/exported/${NAME}"
 
 
 # Create new empty dataset
-if [ -d "${EXPORTED_DIR}/${NAME}" ]; then rm -Rf ${EXPORTED_DIR}/${NAME}; fi
-mkdir "${EXPORTED_DIR}/${NAME}"
-mkdir "${EXPORTED_DIR}/${NAME}/images"
-mkdir "${EXPORTED_DIR}/${NAME}/draw"
-mkdir "${EXPORTED_DIR}/${NAME}/annotations"
-mkdir "${EXPORTED_DIR}/${NAME}/annotations/xmls"
-
-
-
-
+rm -Rf "${EXPORTED_DIR}" 
+mkdir "${EXPORTED_DIR}"
+mkdir "${EXPORTED_DIR}/images"
+mkdir "${EXPORTED_DIR}/draw"
+mkdir "${EXPORTED_DIR}/annotations"
+mkdir "${EXPORTED_DIR}/annotations/xmls"
 
 echo "Creating dataset..."
 for batch in "${BATCH[@]}"
 do
-    python merge_to_export.py --processed="${PROCESSED_DIR}/${batch}" --exported="${EXPORTED_DIR}/${NAME}" --type="${TYPE}"
+    python ${PROJECT_ROOT}/dataset_tools/export/merge_to_export.py --processed="${PROCESSED_DIR}/${batch}" --exported="${EXPORTED_DIR}" --type="${TYPE}"
+    if [[ $? = 0 ]]; then
+        echo "Export script finisher succesfully"
+    else
+        echo "Export script crashed: $?"
+        rm -Rf "${EXPORTED_DIR}"
+        exit
+    fi
 done
 
 
+python ${PROJECT_ROOT}/python_tools/create_draw.py --root "${EXPORTED_DIR}"
 
-python create_draw.py --root "${EXPORTED_DIR}/${NAME}"
 
-
-ls "${EXPORTED_DIR}/${NAME}/images" > "${EXPORTED_DIR}/${NAME}/annotations/trainval.txt"
+ls "${EXPORTED_DIR}/images" > "${EXPORTED_DIR}/annotations/trainval.txt"
 echo "Done"

@@ -75,5 +75,5 @@ rm -r "${dataset_root}/night/draw"
 mkdir "${dataset_root}/day/draw"
 mkdir "${dataset_root}/night/draw"
 
-python create_draw.py --root "${dataset_root}/day"
-python create_draw.py --root "${dataset_root}/night"
+python ${PROJECT_ROOT}/python_tools/create_draw.py --root "${dataset_root}/day"
+python ${PROJECT_ROOT}/python_tools/create_draw.py --root "${dataset_root}/night"
