@@ -2,25 +2,26 @@
 
 
 import tensorflow as tf
-
-
-#model_filepath = '/home/kopi/diplomka/training/configs/cfgs_to_process/resnet/frozen_inference_graph.pb'
-#model_filepath = '/home/kopi/local_git/architectures/ssd_resnet50_v1_fpn/frozen_inference_graph.pb'
-model_filepath = '/home/kopi/local_git/architectures/ssd_mobilenet_v1/tflite_graph.pb'
-
-model_filepath = '/home/kopi/local_git/architectures/ssd_mobilenet_edgetpu/frozen_inference_graph.pb'
-
-with tf.gfile.GFile(model_filepath, 'rb') as f:
-    graph_def = tf.GraphDef()
-    graph_def.ParseFromString(f.read())
-
-    
-
-    names = [n.name for n in graph_def.node ] #if "TFLite_Detection_PostProcess" in n.name ]
+import argparse
+import os
 
 
 
 
 
 
-print(names)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--name', type=str)
+    args = parser.parse_args()
+
+    model_path = os.path.join('/home/kopi/local_git/architectures', args.name, 'frozen_inference_graph.pb')
+
+    with tf.gfile.GFile(model_path, 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        names = [n.name for n in graph_def.node ] #if "TFLite_Detection_PostProcess" in n.name ]
+
+
+    print(names)
